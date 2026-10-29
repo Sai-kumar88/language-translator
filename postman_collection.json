@@ -1,0 +1,251 @@
+{
+  "info": {
+    "name": "Language Translator API - VAPS Technosoft",
+    "_postman_id": "a4d33a1e-84b2-4d23-95cf-01fa9541a021",
+    "description": "API collection for VAPS Technosoft English-to-Indian Regional Language Translator API.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://127.0.0.1:8000",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/health",
+          "host": ["{{baseUrl}}"],
+          "path": ["health"]
+        },
+        "description": "Verify API service availability."
+      },
+      "response": []
+    },
+    {
+      "name": "Get Supported Languages",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/languages",
+          "host": ["{{baseUrl}}"],
+          "path": ["languages"]
+        },
+        "description": "Fetch all supported Indian regional languages."
+      },
+      "response": []
+    },
+    {
+      "name": "Translate - English to Kannada",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"text\": \"Welcome to our school\",\n  \"source_language\": \"en\",\n  \"target_language\": \"kn\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/translate",
+          "host": ["{{baseUrl}}"],
+          "path": ["translate"]
+        },
+        "description": "Translate text to Kannada (kn)."
+      },
+      "response": []
+    },
+    {
+      "name": "Translate - English to Hindi",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"text\": \"Welcome to our school\",\n  \"source_language\": \"en\",\n  \"target_language\": \"hi\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/translate",
+          "host": ["{{baseUrl}}"],
+          "path": ["translate"]
+        },
+        "description": "Translate text to Hindi (hi)."
+      },
+      "response": []
+    },
+    {
+      "name": "Translate - English to Tamil",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"text\": \"Welcome to our school\",\n  \"source_language\": \"en\",\n  \"target_language\": \"ta\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/translate",
+          "host": ["{{baseUrl}}"],
+          "path": ["translate"]
+        },
+        "description": "Translate text to Tamil (ta)."
+      },
+      "response": []
+    },
+    {
+      "name": "Translate - English to Telugu",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"text\": \"Welcome to our school\",\n  \"source_language\": \"en\",\n  \"target_language\": \"te\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/translate",
+          "host": ["{{baseUrl}}"],
+          "path": ["translate"]
+        },
+        "description": "Translate text to Telugu (te)."
+      },
+      "response": []
+    },
+    {
+      "name": "Translate - Error - Empty Text (400)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"text\": \"\",\n  \"source_language\": \"en\",\n  \"target_language\": \"kn\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/translate",
+          "host": ["{{baseUrl}}"],
+          "path": ["translate"]
+        },
+        "description": "Test validation error for empty text."
+      },
+      "response": []
+    },
+    {
+      "name": "Translate - Error - Unsupported Language (400)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"text\": \"Welcome to our school\",\n  \"source_language\": \"en\",\n  \"target_language\": \"fr\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/translate",
+          "host": ["{{baseUrl}}"],
+          "path": ["translate"]
+        },
+        "description": "Test rejection of unsupported target language."
+      },
+      "response": []
+    },
+    {
+      "name": "Translate Document (Word docx, PDF, txt)",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "src": []
+            },
+            {
+              "key": "source_language",
+              "value": "en",
+              "type": "text"
+            },
+            {
+              "key": "target_language",
+              "value": "kn",
+              "type": "text"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/translate/document",
+          "host": ["{{baseUrl}}"],
+          "path": ["translate", "document"]
+        },
+        "description": "Upload a Word document (.docx), PDF (.pdf), or Text (.txt) file to translate."
+      },
+      "response": []
+    },
+    {
+      "name": "Translate Document and Download (.docx)",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "src": []
+            },
+            {
+              "key": "source_language",
+              "value": "en",
+              "type": "text"
+            },
+            {
+              "key": "target_language",
+              "value": "kn",
+              "type": "text"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/translate/document/download",
+          "host": ["{{baseUrl}}"],
+          "path": ["translate", "document", "download"]
+        },
+        "description": "Translate an uploaded document and download the translated result as a .docx Word document."
+      },
+      "response": []
+    }
+  ]
+}
