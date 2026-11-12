@@ -7,7 +7,9 @@ Provides endpoints for:
 - POST /translate: Translate English text into regional languages
 """
 
-from fastapi import APIRouter, Depends, File, Form, HTTPException, Response, UploadFile, status
+from pathlib import Path
+from fastapi import APIRouter, Depends, File, Form, HTTPException, Request, Response, UploadFile, status
+from fastapi.responses import FileResponse
 from app.core.config import (
     SUPPORTED_TARGET_LANGUAGES,
     resolve_source_language_code,
@@ -39,8 +41,14 @@ router = APIRouter(tags=["Translation"])
     description="Welcome endpoint providing API status and navigation links.",
     status_code=status.HTTP_200_OK,
 )
-async def api_root():
-    """Welcome and API discovery endpoint."""
+async def api_root(request: Request):
+    """Welcome and API discovery endpoint, or serves Web UI for browsers."""
+    accept = request.headers.get("accept", "")
+    if "text/html" in accept and not accept.startswith("*/*"):
+        index_path = Path(__file__).resolve().parent.parent.parent / "static" / "index.html"
+        if index_path.exists():
+            return FileResponse(index_path, media_type="text/html")
+
     return {
         "service": "Language Translator API - VAPS Technosoft",
         "version": "1.0.0",
@@ -51,6 +59,7 @@ async def api_root():
             "openapi_json": "/openapi.json",
         },
         "endpoints": {
+            "web_ui": "/ui",
             "health": "/health",
             "supported_languages": "/languages",
             "translate": "/translate [POST]",
@@ -58,6 +67,15 @@ async def api_root():
             "translate_document_download": "/translate/document/download [POST multipart/form-data]",
         },
     }
+
+
+@router.get("/ui", summary="Web UI Frontend", include_in_schema=False)
+async def serve_ui():
+    """Serve the static frontend user interface."""
+    index_path = Path(__file__).resolve().parent.parent.parent / "static" / "index.html"
+    if index_path.exists():
+        return FileResponse(index_path, media_type="text/html")
+    raise HTTPException(status_code=404, detail="Frontend static files not found.")
 
 
 @router.get(

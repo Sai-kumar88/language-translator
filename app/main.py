@@ -7,10 +7,12 @@ VAPS Technosoft - Language Translator REST API.
 from contextlib import asynccontextmanager
 import json
 import logging
+from pathlib import Path
 from fastapi import FastAPI, HTTPException, Request, status
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
 
 from app.api.routes import router
 from app.core.config import get_settings
@@ -152,6 +154,17 @@ def create_application() -> FastAPI:
 
     # Register API routes
     app.include_router(router, prefix=settings.API_PREFIX)
+
+    # Mount static assets directory
+    static_dir = Path(__file__).resolve().parent.parent / "static"
+    if static_dir.exists():
+        app.mount("/static", StaticFiles(directory=str(static_dir)), name="static")
+        css_dir = static_dir / "css"
+        if css_dir.exists():
+            app.mount("/css", StaticFiles(directory=str(css_dir)), name="css")
+        js_dir = static_dir / "js"
+        if js_dir.exists():
+            app.mount("/js", StaticFiles(directory=str(js_dir)), name="js")
 
     return app
 

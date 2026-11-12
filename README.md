@@ -159,7 +159,7 @@ python -m uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload
 ```
 
 Server endpoints will be accessible at:
-- **Base URL:** `http://127.0.0.1:8000`
+- **Web UI (Frontend):** [http://127.0.0.1:8000/ui](http://127.0.0.1:8000/ui) or [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
 - **Swagger UI:** [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
 - **ReDoc UI:** [http://127.0.0.1:8000/redoc](http://127.0.0.1:8000/redoc)
 - **Health Check:** [http://127.0.0.1:8000/health](http://127.0.0.1:8000/health)

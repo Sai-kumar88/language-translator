@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Language Translator - VAPS Technosoft</title>
+  
+  <!-- Stylesheet directly in static root -->
+  <link rel="stylesheet" href="/static/style.css" id="main-css" onerror="this.onerror=null;this.href='style.css';">
+  
+  <script>
+    // Immediate Tab Switching (guaranteed to work instantly)
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        if (btn.getAttribute('data-tab') === tabName) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+      document.querySelectorAll('.tab-panel').forEach(panel => {
+        if (panel.id === `tab-${tabName}`) {
+          panel.classList.add('active');
+        } else {
+          panel.classList.remove('active');
+        }
+      });
+    }
+    window.switchTab = switchTab;
+  </script>
+</head>
+<body>
+
+  <!-- Application Header -->
+  <header class="app-header">
+    <div class="header-container">
+      <a href="#" class="brand-section">
+        <div class="brand-logo-badge">VT</div>
+        <div class="brand-meta">
+          <h1>
+            Language Translator
+            <span class="company-tag">VAPS Technosoft</span>
+          </h1>
+          <p>Instant English to 11 Indian Regional Languages</p>
+        </div>
+      </a>
+
+      <div class="header-actions">
+        <!-- Live API status indicator -->
+        <div class="api-status-pill" id="api-status-pill" title="Backend API Health Status">
+          <span class="status-dot" id="status-dot"></span>
+          <span id="status-text">Connecting...</span>
+        </div>
+
+        <a href="/docs" target="_blank" class="header-link-btn" title="Open Interactive Swagger Documentation">
+          <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+          </svg>
+          Swagger Docs
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Body Content -->
+  <main class="app-main">
+    
+    <!-- Tab Navigation -->
+    <nav class="tabs-navigation">
+      <button type="button" class="tab-btn active" id="tab-btn-text" data-tab="text" onclick="switchTab('text')">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path>
+        </svg>
+        Text Translator
+      </button>
+
+      <button type="button" class="tab-btn" id="tab-btn-document" data-tab="document" onclick="switchTab('document')">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+        </svg>
+        Document Translator (.docx / .pdf / .txt)
+      </button>
+
+      <button type="button" class="tab-btn" id="tab-btn-languages" data-tab="languages" onclick="switchTab('languages')">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path>
+        </svg>
+        Supported Regional Languages (11)
+      </button>
+    </nav>
+
+    <!-- ==========================================
+         TAB 1: TEXT TRANSLATOR
+         ========================================== -->
+    <div class="tab-panel active" id="tab-text">
+      <div class="translator-card">
+        
+        <!-- Language Selector Toolbar -->
+        <div class="lang-toolbar">
+          <div class="lang-selector-group">
+            <div class="lang-box">
+              <label for="source-lang-select">Source Language</label>
+              <select id="source-lang-select" class="custom-select" disabled>
+                <option value="en" selected>English (Original)</option>
+              </select>
+            </div>
+
+            <button type="button" class="swap-btn" id="swap-btn" title="Language orientation">
+              <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path>
+              </svg>
+            </button>
+
+            <div class="lang-box">
+              <label for="target-lang-select">Target Regional Language</label>
+              <select id="target-lang-select" class="custom-select">
+                <option value="kn" selected>Kannada (ಕನ್ನಡ)</option>
+                <option value="hi">Hindi (हिन्दी)</option>
+                <option value="ta">Tamil (தமிழ்)</option>
+                <option value="te">Telugu (తెలుగు)</option>
+                <option value="ml">Malayalam (മലയാളം)</option>
+                <option value="mr">Marathi (मराठी)</option>
+                <option value="bn">Bengali (বাংলা)</option>
+                <option value="gu">Gujarati (ગુજરાતી)</option>
+                <option value="pa">Punjabi (ਪੰਜਾਬੀ)</option>
+                <option value="or">Odia (ଓଡ଼ିଆ)</option>
+                <option value="ur">Urdu (اردو)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Translation Dual Editor Grid -->
+        <div class="translation-workspace">
+          
+          <!-- Source (English) Pane -->
+          <div class="editor-pane source-pane">
+            <textarea
+              id="source-text"
+              class="editor-textarea"
+              placeholder="Type or paste English text here to translate... (e.g. 'Welcome to our institution!')"
+              spellcheck="false"
+            ></textarea>
+
+            <div class="editor-footer">
+              <div class="editor-actions">
+                <button type="button" class="icon-action-btn" id="clear-btn" title="Clear text">
+                  <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                  </svg>
+                </button>
+                <button type="button" class="icon-action-btn" id="paste-btn" title="Paste from clipboard">
+                  <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                  </svg>
+                </button>
+                <!-- Direct document upload into editor -->
+                <button type="button" class="icon-action-btn" id="upload-doc-to-editor-btn" title="Upload Document (.docx, .pdf, .txt) into text box" onclick="document.getElementById('editor-file-input').click()">
+                  <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
+                  </svg>
+                </button>
+                <input type="file" id="editor-file-input" style="display: none;" accept=".docx,.pdf,.txt" onchange="if(this.files && this.files[0]) loadDocumentIntoEditor(this.files[0])">
+              </div>
+
+              <div style="display: flex; gap: 0.75rem;">
+                <span id="word-count">0 words</span>
+                <span id="char-count">0 / 150,000</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Target (Regional Language) Pane -->
+          <div class="editor-pane target-pane">
+            <div id="target-output" class="target-content-box">
+              <span class="target-placeholder">Translation will appear here in native Indian script...</span>
+            </div>
+
+            <div class="editor-footer">
+              <div class="editor-actions">
+                <button type="button" class="icon-action-btn" id="copy-btn" title="Copy translation to clipboard">
+                  <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                  </svg>
+                </button>
+                <button type="button" class="icon-action-btn" id="speak-btn" title="Listen / Pronounce translation">
+                  <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path>
+                  </svg>
+                </button>
+                <button type="button" class="icon-action-btn" id="download-txt-btn" title="Download translation as .txt">
+                  <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                  </svg>
+                </button>
+                <button type="button" class="icon-action-btn" id="font-dec-btn" title="Decrease font size">A-</button>
+                <button type="button" class="icon-action-btn" id="font-inc-btn" title="Increase font size">A+</button>
+              </div>
+
+              <span>Verified Engine</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Bottom Action Bar -->
+        <div class="action-banner">
+          <div class="shortcut-hint">
+            Pro tip: Press <kbd>Ctrl</kbd> + <kbd>Enter</kbd> to translate instantly.
+          </div>
+
+          <button type="button" class="btn-primary" id="translate-btn">
+            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+            </svg>
+            <span>Translate Now</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ==========================================
+         TAB 2: DOCUMENT TRANSLATOR
+         ========================================== -->
+    <div class="tab-panel" id="tab-document">
+      <div class="doc-translator-container">
+        
+        <!-- Upload Form Card -->
+        <div class="doc-upload-card">
+          <div class="card-heading">
+            <h3>
+              <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
+              </svg>
+              Upload Document
+            </h3>
+            <p>Upload a Word document (.docx), PDF (.pdf), or Text (.txt) file to translate its entire contents into an Indian regional language.</p>
+          </div>
+
+          <!-- Drop Zone with Direct File Chooser Button -->
+          <div class="drop-zone" id="drop-zone" onclick="document.getElementById('file-input').click()">
+            <div class="drop-zone-icon">
+              <svg width="28" height="28" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+              </svg>
+            </div>
+            <h4>Upload Word (.docx), PDF (.pdf), or Text (.txt)</h4>
+            
+            <div style="margin: 0.9rem 0 0.6rem;">
+              <button type="button" class="btn-browse-action" onclick="event.stopPropagation(); document.getElementById('file-input').click();">
+                <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
+                </svg>
+                <span>Choose Document File</span>
+              </button>
+            </div>
+
+            <p>or drag and drop your file here</p>
+            <div class="supported-badge-list">
+              <span class="format-badge">.DOCX</span>
+              <span class="format-badge">.PDF</span>
+              <span class="format-badge">.TXT</span>
+            </div>
+          </div>
+          <input type="file" id="file-input" style="display: none;" accept=".docx,.pdf,.txt" onchange="if(this.files && this.files[0]) handleFileSelected(this.files[0])">
+
+          <!-- File Selected Preview Box -->
+          <div class="file-selected-box" id="file-selected-box">
+            <div class="file-info-group">
+              <div class="file-type-icon" id="file-type-icon">DOCX</div>
+              <div>
+                <div class="file-name" id="file-name">filename.docx</div>
+                <div class="file-size" id="file-size">0 KB</div>
+              </div>
+            </div>
+            <button type="button" class="icon-action-btn" id="remove-file-btn" title="Remove selected file">
+              <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+            </button>
+          </div>
+
+          <!-- Target Language for Document -->
+          <div class="lang-box" style="margin-bottom: 1.25rem;">
+            <label for="doc-target-lang-select">Target Regional Language</label>
+            <select id="doc-target-lang-select" class="custom-select">
+              <!-- Populated via JS -->
+            </select>
+          </div>
+
+          <!-- Action Buttons Group -->
+          <div class="doc-buttons-group">
+            <button type="button" class="btn-primary" id="doc-translate-view-btn" disabled>
+              <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+              </svg>
+              <span>Translate & Preview in Browser</span>
+            </button>
+
+            <button type="button" class="btn-secondary" id="doc-translate-download-btn" disabled>
+              <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+              </svg>
+              <span>Translate & Download as Word (.docx)</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Result Preview Card -->
+        <div class="doc-result-card" id="doc-result-card" style="display: none;">
+          <div class="card-heading" style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <h3>Document Translation Result</h3>
+              <p>Review the translated text and original extracted content below.</p>
+            </div>
+            <button type="button" class="icon-action-btn" id="doc-copy-btn" title="Copy translated text">
+              <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+              </svg>
+            </button>
+          </div>
+
+          <div class="doc-result-tabs">
+            <button type="button" class="doc-tab-btn active" data-view="translated">Translated Content</button>
+            <button type="button" class="doc-tab-btn" data-view="original">Original Extracted Text</button>
+          </div>
+
+          <div class="doc-text-viewer" id="doc-viewer">
+            Select an action to view results...
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ==========================================
+         TAB 3: SUPPORTED LANGUAGES
+         ========================================== -->
+    <div class="tab-panel" id="tab-languages">
+      <div style="margin-bottom: 1.5rem;">
+        <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--text-main);">11 Supported Indian Regional Languages</h2>
+        <p style="font-size: 0.88rem; color: var(--text-sub); margin-top: 0.25rem;">
+          Click any language card to instantly set it as the active translation target.
+        </p>
+      </div>
+
+      <div class="languages-grid" id="languages-grid">
+        <!-- Populated dynamically via JS -->
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="app-footer">
+    <p>© 2026 VAPS Technosoft — Modular, High-Precision Language Translator REST API & Web Suite.</p>
+  </footer>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container"></div>
+
+  <!-- JavaScript directly in static root -->
+  <script src="/static/app.js" onerror="this.onerror=null;this.src='app.js';"></script>
+</body>
+</html>
